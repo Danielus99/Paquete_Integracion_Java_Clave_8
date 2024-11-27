@@ -1,3 +1,14 @@
+# Cómo hacerlo funcionar
+
+Buscar el archivo spEnvironmentContext y modificar en la linea 20 la ruta por el config de la tuya
+
+En certproxy2.properties, cambiar certificates.path a tu ruta absoluta a Certificates
+
+Cuando inicien el servidor con tomcat entren en: http://localhost:8080/SP2
+
+NOTA: si tienen problema haciendo la build intentenlo por terminal mvn clean install -U
+
+
 # Paquete_Integracion_Java_Clave_8
  
 Integrating Cl@ve (Spain's electronic identification system) into your Java 11 web application involves several steps. The process is outlined below, covering the technical and legal aspects:
