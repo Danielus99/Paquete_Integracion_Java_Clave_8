@@ -17,6 +17,24 @@
     -->
 
     <dependencies>
+    
+    <!-- Javax XML-->
+    	<dependency>
+		    <groupId>javax.xml.bind</groupId>
+		    <artifactId>jaxb-api</artifactId>
+		    <version>2.3.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.sun.xml.bind</groupId>
+		    <artifactId>jaxb-impl</artifactId>
+		    <version>2.3.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>javax.activation</groupId>
+		    <artifactId>activation</artifactId>
+		    <version>1.1.1</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>es.gob.sgad</groupId>
 			<artifactId>clave-j20068.saml-engine</artifactId>

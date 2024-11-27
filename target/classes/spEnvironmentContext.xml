@@ -6,8 +6,16 @@
     <!--
     Se puede configurar la ruta base mediante variables de entorno o mediante el parámetro -D por lineas de comando
     del siguiente modo: Ejemplo con SP_CONFIG_REPOSITORY -->
-         
+    <!-- 
     <bean id="spConfigRepository" class="java.lang.String">
         <constructor-arg value="#{ systemProperties['CLAVE_SP2_CONFIG_REPOSITORY'] ?: systemEnvironment['CLAVE_SP2_CONFIG_REPOSITORY'] }" />
+    </bean>
+    -->
+    
+    <!-- DPM 20241126
+    CAMBIAR VALUE SEGÚN DIRECTORIO (HABRÍA QUE CARGARLO DE FORMA SIMILAR AL COMENTARIO DE ARRIBA, PERO NO SÉ CÓMO HACERLO) -->
+    
+    <bean id="spConfigRepository" class="java.lang.String">
+        <constructor-arg value="/home/daniel/Escritorio/Poddera/workspace/Paquete_de_Integracion_Java8_v2.2.4/Paquete_Integracion_Java_Clave_8/Config/" />
     </bean>
 </beans>
