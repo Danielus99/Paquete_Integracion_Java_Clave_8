@@ -8,6 +8,14 @@ Cuando inicien el servidor con tomcat entren en: http://localhost:8080/SP2
 
 NOTA: si tienen problema haciendo la build intentenlo por terminal mvn clean install -U
 
+# Comandos para generar autofirma (carpeta Config)
+
+(Mirar que nombre y apellido sea "localhost", de otra manera no sé si funciona)
+keytool -genkeypair -alias tomcat -keyalg RSA -keysize 2048 -validity 365 -keystore KeyStore.jks -storepass local-demo -keypass local-demo
+
+keytool -export -alias tomcat -file archivo_exportado.crt -keystore KeyStore.jks -storepass local-demo
+
+keytool -import -alias tomcat -keystore TrustStore.jks -file archivo_exportado.crt
 
 # Paquete_Integracion_Java_Clave_8
  
