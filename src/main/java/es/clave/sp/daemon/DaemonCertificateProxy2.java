@@ -194,6 +194,61 @@ public class DaemonCertificateProxy2 {
                     NodeList IDPSSODescriptorNodeList = doc.getElementsByTagName("md:IDPSSODescriptor");
                     Node IDPSSODescriptorNode = IDPSSODescriptorNodeList.item(0);
                     
+                    NodeList KeyDescriptorNodeList = ((Element) IDPSSODescriptorNode).getElementsByTagName("md:KeyDescriptor");
+                    
+                    for (int i=0; i < KeyDescriptorNodeList.getLength(); i++) {
+                    	Element KeyDescriptorNodeElement = (Element) KeyDescriptorNodeList.item(i);
+                    	
+                    	// Tipo de certificado: de firma (signing) / de cifrado (encryption)
+                        certificateUse = KeyDescriptorNodeElement.getAttribute("use");
+                        log.debug("use: "+certificateUse);
+                        
+                        Node KeyInfoNode = KeyDescriptorNodeElement.getElementsByTagName("ds:KeyInfo").item(0);
+                        Element KeyInfoElement = (Element) KeyInfoNode;
+                        
+                        // Nombre de certificado: de firma (proxy_sign_*) / de cifrado (proxy_cipher_*)
+                        
+                        certificateKeyName = KeyInfoElement.getElementsByTagName("ds:KeyName").item(0).getTextContent();
+                        
+                        Node X509DataNode = KeyInfoElement.getElementsByTagName("ds:X509Data").item(0);
+                        Element X509DataElement = (Element) X509DataNode;
+                        // Valor del certificado en Base64
+                        certificateX509Certificate = X509DataElement.getElementsByTagName("ds:X509Certificate").item(0).getTextContent();
+                        
+                        // Estado del certificado: active / inactive
+                        certificateMgmtData = KeyInfoElement.getElementsByTagName("ds:MgmtData").item(0).getTextContent();
+                        
+                        // INICIO ALGORITMO DE ACTUZALIZACION Y RECUPERACION DE CERTIFICADOS PUBLICOS
+                        // Si el nombre del certificado obtenido a traves del XML existe en el fichero de propiedades 'certificates.properties'...
+                        if (certificatesStateMap.get(certificateKeyName)!=null) {
+                            // Si el estado del certificado obtenido es igual al del fichero de propiedades...
+                            if (certificatesStateMap.get(certificateKeyName).equals(certificateMgmtData)) {
+                            	if (certificateUse.equals("signing")) {
+                            		// Certificado de firma {certificateKeyName} ya existe
+                            		message = messagesProperties.getMessageWithMultipleProps("daemonCertificateProxy2.signatureCertificateExists",
+                                            new ArrayList<String>(Arrays.asList(certificateKeyName)));
+                            	} else {
+                            		// Certificado de cifrado {certificateKeyName} ya existe
+                            		message = messagesProperties.getMessageWithMultipleProps("daemonCertificateProxy2.encryptionCertificateExists",
+                                            new ArrayList<String>(Arrays.asList(certificateKeyName)));
+                            	}
+                                log.info(message);
+                                
+                            // Si el estado del certificado obtenido es diferente al del fichero de propiedades...
+                            } else {
+                            	// Se descarga el certificado en el path de certificados y se actualiza en el fichero de propiedades 'certificates.properties'
+                            	downloadCertificate("certificateUpdated", certificateUse, certificateKeyName, certificateX509Certificate, certificateMgmtData,
+                            			certificatesStateMap, certificatesUpdatedMap);
+                            }
+                            
+                        // Si el nombre del certificado obtenido a traves del XML no existe en el fichero de propiedades 'certificates.properties'...
+                        } else {
+                        	// Se descarga el certificado en el path de certificados y se inserta en el fichero de propiedades 'certificates.properties'
+                        	downloadCertificate("certificateDownloaded", certificateUse, certificateKeyName, certificateX509Certificate, certificateMgmtData,
+                        			certificatesStateMap, certificatesUpdatedMap);
+                        }
+                    }
+                    /*
                     for (int i=0; i < IDPSSODescriptorNode.getChildNodes().getLength(); i++) {
                         Node KeyDescriptorNode = IDPSSODescriptorNode.getChildNodes().item(i);
                         Element KeyDescriptorNodeElement = (Element) KeyDescriptorNode;
@@ -247,7 +302,7 @@ public class DaemonCertificateProxy2 {
                             			certificatesStateMap, certificatesUpdatedMap);
                             }
                         }
-                    }
+                    }*/
                     
                     // Se rellena el fichero 'certificates.properties' con la nueva informacion de los certificados actualizados
                     Iterator<Map.Entry<String, String>> iterator = certificatesStateMap.entrySet().iterator();
