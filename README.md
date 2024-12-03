@@ -17,6 +17,30 @@ keytool -export -alias tomcat -file archivo_exportado.crt -keystore KeyStore.jks
 
 keytool -import -alias tomcat -keystore TrustStore.jks -file archivo_exportado.crt
 
+# Conectores Tomcat
+
+<Connector
+    port="8080"
+    protocol="HTTP/1.1"
+    connectionTimeout="20000"
+    redirectPort="8443" />
+	
+    <Connector
+    	SSLEnabled="true"
+    	clientAuth="false" 
+    	connectionTimeout="20000"
+        keystoreFile="/home/daniel/Escritorio/Poddera/workspace/Paquete_de_Integracion_Java8_v2.2.4/Paquete_Integracion_Java_Clave_8/Config/KeyStore.jks" 
+        keystorePass="local-demo" 
+        keystoreType="JKS" 
+        port="8443" 
+        protocol="HTTP/1.1" 
+        scheme="https"
+		secure="true"
+		sslProtocol="TLS"
+		truststoreFile="/home/daniel/Escritorio/Poddera/workspace/Paquete_de_Integracion_Java8_v2.2.4/Paquete_Integracion_Java_Clave_8/Config/TrustStore.jks"
+		truststorePass="local-demo"
+		/> 
+
 # Paquete_Integracion_Java_Clave_8
  
 Integrating Cl@ve (Spain's electronic identification system) into your Java 11 web application involves several steps. The process is outlined below, covering the technical and legal aspects:
