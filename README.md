@@ -4,6 +4,33 @@ Buscar el archivo spEnvironmentContext y modificar en la linea 20 la ruta por el
 
 En certproxy2.properties, cambiar certificates.path a tu ruta absoluta a Certificates
 
+Actualizar Connectors del servidor Tomcat creado (server.xml):
+
+```
+<Connector
+    port="8080"
+    protocol="HTTP/1.1"
+    connectionTimeout="20000"
+    redirectPort="8443" />
+	
+<Connector
+	SSLEnabled="true"
+	clientAuth="false" 
+	connectionTimeout="20000"
+	keystoreFile="/home/user/.../Paquete_Integracion_Java_Clave_8/Config/KeyStore.jks" 
+	keystorePass="local-demo" 
+	keystoreType="JKS" 
+	port="8443" 
+	protocol="HTTP/1.1" 
+	scheme="https"
+	secure="true"
+	sslProtocol="TLS"
+	truststoreFile="/home/user/.../Paquete_Integracion_Java_Clave_8/Config/TrustStore.jks"
+	truststorePass="local-demo"
+		/> 
+
+```
+
 Cuando inicien el servidor con tomcat entren en: http://localhost:8080/SP2
 
 NOTA: si tienen problema haciendo la build intentenlo por terminal mvn clean install -U
@@ -17,31 +44,7 @@ keytool -export -alias tomcat -file archivo_exportado.crt -keystore KeyStore.jks
 
 keytool -import -alias tomcat -keystore TrustStore.jks -file archivo_exportado.crt
 
-# Conectores Tomcat
-
-<Connector
-    port="8080"
-    protocol="HTTP/1.1"
-    connectionTimeout="20000"
-    redirectPort="8443" />
-	
-    <Connector
-    	SSLEnabled="true"
-    	clientAuth="false" 
-    	connectionTimeout="20000"
-        keystoreFile="/home/daniel/Escritorio/Poddera/workspace/Paquete_de_Integracion_Java8_v2.2.4/Paquete_Integracion_Java_Clave_8/Config/KeyStore.jks" 
-        keystorePass="local-demo" 
-        keystoreType="JKS" 
-        port="8443" 
-        protocol="HTTP/1.1" 
-        scheme="https"
-		secure="true"
-		sslProtocol="TLS"
-		truststoreFile="/home/daniel/Escritorio/Poddera/workspace/Paquete_de_Integracion_Java8_v2.2.4/Paquete_Integracion_Java_Clave_8/Config/TrustStore.jks"
-		truststorePass="local-demo"
-		/> 
-
-# Paquete_Integracion_Java_Clave_8
+# Paquete_Integracion_Java_Clave_8 (Apuntes para pasarlo a Java 11)
  
 Integrating Cl@ve (Spain's electronic identification system) into your Java 11 web application involves several steps. The process is outlined below, covering the technical and legal aspects:
 1. Understand Cl@ve Integration Options
